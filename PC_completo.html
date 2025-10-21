@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCR Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 20px;
+        }
+        form {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background: #f39c12;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #e67e22;
+        }
+    </style>
+</head>
+<body>
+    <h1>PCR Registration Form</h1>
+    <form id="pcrForm">
+        <div class="form-section">
+            <h2>Patient Data</h2>
+            <label for="patientName">Name:</label>
+            <input type="text" id="patientName" name="patientName" required>
+            <label for="patientDOB">Date of Birth:</label>
+            <input type="date" id="patientDOB" name="patientDOB" required>
+        </div>
+        <div class="form-section">
+            <h2>Cardiovascular Risk Factors</h2>
+            <label for="riskFactors">Risk Factors:</label>
+            <input type="text" id="riskFactors" name="riskFactors">
+        </div>
+        <div class="form-section">
+            <h2>Event Data</h2>
+            <label for="eventDescription">Event Description:</label>
+            <input type="text" id="eventDescription" name="eventDescription">
+        </div>
+        <div class="form-section">
+            <h2>Timing Information</h2>
+            <label for="resuscitatorArrival">Second Resuscitator Arrival:</label>
+            <input type="text" id="resuscitatorArrival" name="resuscitatorArrival">
+        </div>
+        <div class="form-section">
+            <h2>Resuscitation Variables</h2>
+            <label for="defibrillation">Defibrillation:</label>
+            <input type="text" id="defibrillation" name="defibrillation">
+        </div>
+        <div class="form-section">
+            <h2>Post-Arrest Procedures</h2>
+            <label for="postArrestProcedures">Procedures:</label>
+            <input type="text" id="postArrestProcedures" name="postArrestProcedures">
+        </div>
+        <div class="form-section">
+            <h2>Hospital Discharge</h2>
+            <label for="dischargeDate">Discharge Date:</label>
+            <input type="date" id="dischargeDate" name="dischargeDate">
+        </div>
+        <div class="form-section">
+            <h2>ICU Stay Duration</h2>
+            <label for="icuStayDuration">Duration (days):</label>
+            <input type="text" id="icuStayDuration" name="icuStayDuration">
+        </div>
+        <div class="form-section">
+            <h2>Cerebral Function</h2>
+            <label for="cerebralFunction">Function:</label>
+            <input type="text" id="cerebralFunction" name="cerebralFunction">
+        </div>
+        <div class="form-section">
+            <h2>Exit Cause</h2>
+            <label for="exitCause">Cause:</label>
+            <input type="text" id="exitCause" name="exitCause">
+        </div>
+        <div class="form-section">
+            <h2>Diagnosis</h2>
+            <label for="diagnosis">Diagnosis:</label>
+            <input type="text" id="diagnosis" name="diagnosis">
+        </div>
+        <button type="button" onclick="downloadExcel()">Download as Excel</button>
+    </form>
+    <script>
+        function downloadExcel() {
+            const form = document.getElementById('pcrForm');
+            let data = [];
+            for (let i = 0; i < form.elements.length; i++) {
+                const element = form.elements[i];
+                if (element.name) {
+                    data.push(`${element.name}: ${element.value}`);
+                }
+            }
+            const blob = new Blob([data.join('\n')], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PCR_Registration_Form.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
