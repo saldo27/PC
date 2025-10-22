@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro PCR - Paro Cardiorrespiratorio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -954,45 +955,62 @@
             <!-- BOTONES -->
             <div class="button-group">
                 <button type="reset" class="secondary">Limpiar Formulario</button>
-                <button type="button" onclick="downloadCSV()">Descargar como CSV</button>
+                <button type="button" onclick="downloadXLSX()">Descargar como XLSX</button>
                 <button type="button" onclick="printForm()">Imprimir</button>
             </div>
         </form>
     </div>
     
     <script>
-        function downloadCSV() {
+        function downloadXLSX() {
             const form = document.getElementById('pcrForm');
-            let data = [];
+            let dataArray = [];
+            let headerRow = [];
+            let valueRow = [];
+            let processedNames = new Set();
             
+            // Recopilar datos del formulario
             for (let i = 0; i < form.elements.length; i++) {
                 const element = form.elements[i];
-                if (element.name && element.type !== 'button') {
+                if (element.name && element.type !== 'button' && !processedNames.has(element.name)) {
+                    processedNames.add(element.name);
+                    headerRow.push(element.name);
+                    
                     let value = '';
                     
-                    if (element.type === 'checkbox' && element.checked) {
-                        value = element.value;
-                    } else if (element.type === 'radio' && element.checked) {
-                        value = element.value;
-                    } else if (element.type !== 'checkbox' && element.type !== 'radio') {
-                        value = element.value;
-                    }
+                    // Obtener valores seleccionados
+                    const elements = form.querySelectorAll(`[name="${element.name}"]`);
+                    let values = [];
                     
-                    if (value || element.type === 'text' || element.type === 'date' || element.type === 'time' || element.type === 'number') {
-                        data.push(`"${element.name}","${value}"`);
-                    }
+                    elements.forEach(el => {
+                        if (el.type === 'checkbox' && el.checked) {
+                            values.push(el.value);
+                        } else if (el.type === 'radio' && el.checked) {
+                            values.push(el.value);
+                        } else if (el.type !== 'checkbox' && el.type !== 'radio' && el.value) {
+                            values.push(el.value);
+                        }
+                    });
+                    
+                    value = values.join('; ');
+                    valueRow.push(value);
                 }
             }
             
-            const blob = new Blob([data.join('\n')], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'Registro_PCR.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            dataArray.push(headerRow);
+            dataArray.push(valueRow);
+            
+            // Crear workbook con los datos
+            const worksheet = XLSX.utils.aoa_to_sheet(dataArray);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Registro PCR");
+            
+            // Ajustar ancho de columnas automáticamente
+            const colWidths = headerRow.map(header => ({wch: Math.max(header.length, 15)}));
+            worksheet['!cols'] = colWidths;
+            
+            // Descargar el archivo
+            XLSX.writeFile(workbook, 'Registro_PCR.xlsx');
         }
         
         function printForm() {
