@@ -871,31 +871,33 @@
             </div>
             
             <!-- CAUSA DE EXITUS -->
-            <h2>Causa de Exitus</h2>
-            <div class="checkbox-group" style="flex-direction: column; gap: 8px;">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="causaCardio" name="causaExitus" value="Cardio">
-                    <label for="causaCardio">Cardio</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="causaTrauma" name="causaExitus" value="Trauma">
-                    <label for="causaTrauma">Trauma</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="causaCancer" name="causaExitus" value="Cáncer">
-                    <label for="causaCancer">Cáncer</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="causaNeuro" name="causaExitus" value="Neuro">
-                    <label for="causaNeuro">Neuro</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="causaOtras" name="causaExitus" value="Otras">
-                    <label for="causaOtras">Otras</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="causaDesconocida" name="causaExitus" value="Desconocida">
-                    <label for="causaDesconocida">Desconocida</label>
+            <div id="causaExitusSectionContainer" style="display: none;">
+                <h2>Causa de Exitus</h2>
+                <div class="checkbox-group" style="flex-direction: column; gap: 8px;">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="causaCardio" name="causaExitus" value="Cardio">
+                        <label for="causaCardio">Cardio</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="causaTrauma" name="causaExitus" value="Trauma">
+                        <label for="causaTrauma">Trauma</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="causaCancer" name="causaExitus" value="Cáncer">
+                        <label for="causaCancer">Cáncer</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="causaNeuro" name="causaExitus" value="Neuro">
+                        <label for="causaNeuro">Neuro</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="causaOtras" name="causaExitus" value="Otras">
+                        <label for="causaOtras">Otras</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="causaDesconocida" name="causaExitus" value="Desconocida">
+                        <label for="causaDesconocida">Desconocida</label>
+                    </div>
                 </div>
             </div>
             
@@ -961,6 +963,26 @@
     </div>
     
     <script>
+        // Controlar visibilidad de "Causa de Exitus" según "Función Cerebral y Estado"
+        function toggleCausaExitus() {
+            const funcionCerebral = document.querySelector('input[name="funcionCerebral"]:checked');
+            const causaExitusSection = document.getElementById('causaExitusSectionContainer');
+            
+            if (funcionCerebral && funcionCerebral.value === 'Muerto') {
+                causaExitusSection.style.display = 'block';
+            } else {
+                causaExitusSection.style.display = 'none';
+            }
+        }
+        
+        // Agregar event listeners a los radios de "Función Cerebral y Estado"
+        document.addEventListener('DOMContentLoaded', function() {
+            const funcionCerebralRadios = document.querySelectorAll('input[name="funcionCerebral"]');
+            funcionCerebralRadios.forEach(radio => {
+                radio.addEventListener('change', toggleCausaExitus);
+            });
+        });
+        
         function downloadXLSX() {
             const form = document.getElementById('pcrForm');
             let dataArray = [];
