@@ -1009,54 +1009,72 @@
         });
         
         function downloadXLSX() {
-            const form = document.getElementById('pcrForm');
-            let dataArray = [];
-            let headerRow = [];
-            let valueRow = [];
-            let processedNames = new Set();
-            
-            // Recopilar datos del formulario
-            for (let i = 0; i < form.elements.length; i++) {
-                const element = form.elements[i];
-                if (element.name && element.type !== 'button' && !processedNames.has(element.name)) {
-                    processedNames.add(element.name);
-                    headerRow.push(element.name);
-                    
-                    let value = '';
-                    
-                    // Obtener valores seleccionados
-                    const elements = form.querySelectorAll(`[name="${element.name}"]`);
-                    let values = [];
-                    
-                    elements.forEach(el => {
-                        if (el.type === 'checkbox' && el.checked) {
-                            values.push(el.value);
-                        } else if (el.type === 'radio' && el.checked) {
-                            values.push(el.value);
-                        } else if (el.type !== 'checkbox' && el.type !== 'radio' && el.value) {
-                            values.push(el.value);
-                        }
-                    });
-                    
-                    value = values.join('; ');
-                    valueRow.push(value);
+            try {
+                const form = document.getElementById('pcrForm');
+                if (!form) {
+                    alert('Error: No se encontró el formulario');
+                    return;
                 }
+                
+                let dataArray = [];
+                let headerRow = [];
+                let valueRow = [];
+                let processedNames = new Set();
+                
+                // Recopilar datos del formulario
+                for (let i = 0; i < form.elements.length; i++) {
+                    const element = form.elements[i];
+                    if (element.name && element.type !== 'button' && !processedNames.has(element.name)) {
+                        processedNames.add(element.name);
+                        headerRow.push(element.name);
+                        
+                        let value = '';
+                        
+                        // Obtener valores seleccionados
+                        const elements = form.querySelectorAll(`[name="${element.name}"]`);
+                        let values = [];
+                        
+                        elements.forEach(el => {
+                            if (el.type === 'checkbox' && el.checked) {
+                                values.push(el.value);
+                            } else if (el.type === 'radio' && el.checked) {
+                                values.push(el.value);
+                            } else if (el.type !== 'checkbox' && el.type !== 'radio' && el.value) {
+                                values.push(el.value);
+                            }
+                        });
+                        
+                        value = values.join('; ');
+                        valueRow.push(value);
+                    }
+                }
+                
+                dataArray.push(headerRow);
+                dataArray.push(valueRow);
+                
+                // Verificar que XLSX esté disponible
+                if (typeof XLSX === 'undefined') {
+                    alert('Error: La librería XLSX no está cargada. Por favor, intenta de nuevo.');
+                    return;
+                }
+                
+                // Crear workbook con los datos
+                const worksheet = XLSX.utils.aoa_to_sheet(dataArray);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Registro PC");
+                
+                // Ajustar ancho de columnas automáticamente
+                const colWidths = headerRow.map(header => ({wch: Math.max(header.length, 15)}));
+                worksheet['!cols'] = colWidths;
+                
+                // Descargar el archivo
+                XLSX.writeFile(workbook, 'Registro_PC.xlsx');
+                
+                console.log('Archivo XLSX descargado exitosamente');
+            } catch (error) {
+                console.error('Error al descargar XLSX:', error);
+                alert('Error al descargar el archivo: ' + error.message);
             }
-            
-            dataArray.push(headerRow);
-            dataArray.push(valueRow);
-            
-            // Crear workbook con los datos
-            const worksheet = XLSX.utils.aoa_to_sheet(dataArray);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Registro PCR");
-            
-            // Ajustar ancho de columnas automáticamente
-            const colWidths = headerRow.map(header => ({wch: Math.max(header.length, 15)}));
-            worksheet['!cols'] = colWidths;
-            
-            // Descargar el archivo
-            XLSX.writeFile(workbook, 'Registro_PCR.xlsx');
         }
         
         function printForm() {
