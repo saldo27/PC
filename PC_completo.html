@@ -565,6 +565,30 @@
                 </div>
             </div>
             
+            <h3>¿Realización SVA?</h3>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="realizacionNo" name="realizacionSVA" value="No">
+                    <label for="realizacionNo">No</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="realizacionResuelta" name="realizacionSVA" value="Resuelta">
+                    <label for="realizacionResuelta">Resuelta</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="realizacionFutil" name="realizacionSVA" value="Futil">
+                    <label for="realizacionFutil">Futil</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="realizacionONR" name="realizacionSVA" value="ONR">
+                    <label for="realizacionONR">ONR</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="realizacionFalsaPCR" name="realizacionSVA" value="Falsa PCR">
+                    <label for="realizacionFalsaPCR">Falsa PCR</label>
+                </div>
+            </div>
+            
             <h3>Tiempos Críticos del SVA</h3>
             <div class="input-group">
                 <div class="form-field">
@@ -741,24 +765,16 @@
                     <label>Recuperación/ROSC:</label>
                     <div class="radio-group">
                         <div class="radio-item">
+                            <input type="radio" id="roscNo" name="rosc" value="No">
+                            <label for="roscNo">No</label>
+                        </div>
+                        <div class="radio-item">
                             <input type="radio" id="roscSiTransitoria" name="rosc" value="Sí/Transitoria">
                             <label for="roscSiTransitoria">Sí/Transitoria</label>
                         </div>
                         <div class="radio-item">
                             <input type="radio" id="roscSiDefinitiva" name="rosc" value="Sí/Definitiva">
                             <label for="roscSiDefinitiva">Sí/Definitiva</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="roscNo" name="rosc" value="No/ONR">
-                            <label for="roscNo">No/ONR</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="roscFutil" name="rosc" value="No/Futil">
-                            <label for="roscFutil">No/Futil</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="roscFalsa" name="rosc" value="No/Falsa PCR">
-                            <label for="roscFalsa">No/Falsa PCR</label>
                         </div>
                     </div>
                 </div>
