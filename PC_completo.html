@@ -565,10 +565,6 @@
                     <label for="realizacionSi">Sí</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="realizacionNo" name="realizacionSVA" value="No">
-                    <label for="realizacionNo">No</label>
-                </div>
-                <div class="checkbox-item">
                     <input type="checkbox" id="realizacionResuelta" name="realizacionSVA" value="Resuelta">
                     <label for="realizacionResuelta">Resuelta</label>
                 </div>
@@ -586,7 +582,8 @@
                 </div>
             </div>
             
-            <h3>Tiempos Críticos del SVA</h3>
+            <div id="svaFieldsContainer" style="display: none;">
+                <h3>Tiempos Críticos del SVA</h3>
             <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;">
                 <div class="form-field" style="flex: 1; min-width: 250px;">
                     <label>Hora llegada 1er equipo:</label>
@@ -952,6 +949,7 @@
                     <textarea id="observaciones" name="observaciones"></textarea>
                 </div>
             </div>
+            </div>
             
             <!-- BOTONES -->
             <div class="button-group">
@@ -980,6 +978,33 @@
             const funcionCerebralRadios = document.querySelectorAll('input[name="funcionCerebral"]');
             funcionCerebralRadios.forEach(radio => {
                 radio.addEventListener('change', toggleCausaExitus);
+            });
+        });
+        
+        // Controlar visibilidad de campos cuando se selecciona "Sí" en "Realización SVA"
+        function toggleSvaFields() {
+            const realizacionCheckboxes = document.querySelectorAll('input[name="realizacionSVA"]');
+            const svaFieldsContainer = document.getElementById('svaFieldsContainer');
+            let isSiChecked = false;
+            
+            realizacionCheckboxes.forEach(checkbox => {
+                if (checkbox.checked && checkbox.value === 'Sí') {
+                    isSiChecked = true;
+                }
+            });
+            
+            if (isSiChecked) {
+                svaFieldsContainer.style.display = 'block';
+            } else {
+                svaFieldsContainer.style.display = 'none';
+            }
+        }
+        
+        // Agregar event listeners a los checkboxes de "Realización SVA"
+        document.addEventListener('DOMContentLoaded', function() {
+            const realizacionCheckboxes = document.querySelectorAll('input[name="realizacionSVA"]');
+            realizacionCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', toggleSvaFields);
             });
         });
         
